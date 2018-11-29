@@ -10,6 +10,10 @@
 }
 .instagram img {
 	width: 100%;
+	transition-duration: .3s;
+}
+.instagram img:hover {
+	box-shadow: 0 0 10px 1px #e3e3e3;
 }
 .instagram .year {
 	font-size: 16px;
@@ -31,8 +35,10 @@
 	position: relative;
 	display: inline-block;
 	text-align: center;
-	background: #ededed;
+	margin: 0 10px 0 0;
+	transition: .3s;
 }
+
 .instagram .thumb a {
 	position: relative;
 }
