@@ -39,6 +39,10 @@
 	transition: .3s;
 }
 
+.instagram .thumb:hover > a > img {
+	box-shadow: 0 0 10px 1px #e3e3e3;
+}
+
 .instagram .thumb a {
 	position: relative;
 }
