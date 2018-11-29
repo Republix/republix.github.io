@@ -120,7 +120,7 @@
             var minSrc = 'https://raw.githubusercontent.com/Republix/DogeBackup/master/photos/' + data.link[i];
 
             // var src = 'https://raw.githubusercontent.com/Republix/DogeBackup/master/media/photos-min/' + data.link[i];
-            var src = 'https://raw.githubusercontent.com/Republix/DogeBackup/master/photos-min/' + data.link[i];
+            var src = 'https://raw.githubusercontent.com/Republix/DogeBackup/master/photos/' + data.link[i];
 
             var type = data.type[i];
             var target = src + (type === 'video' ? '.mp4' : '.jpg');
