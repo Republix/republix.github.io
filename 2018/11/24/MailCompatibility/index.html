@@ -6,18 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://m1.republix.cn">
-  <title>Archives: 2017 | rlx</title>
+  <title>邮件模板兼容性处理 | rlx</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="this is not kyb">
-<meta property="og:type" content="website">
-<meta property="og:title" content="rlx">
-<meta property="og:url" content="http://m1.republix.cn/archives/2017/index.html">
+  <meta name="description" content="邮件兼容性处理">
+<meta name="keywords" content="mail">
+<meta property="og:type" content="article">
+<meta property="og:title" content="邮件模板兼容性处理">
+<meta property="og:url" content="http://m1.republix.cn/2018/11/24/MailCompatibility/index.html">
 <meta property="og:site_name" content="rlx">
-<meta property="og:description" content="this is not kyb">
+<meta property="og:description" content="邮件兼容性处理">
 <meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-11-30T09:24:30.730Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="rlx">
-<meta name="twitter:description" content="this is not kyb">
+<meta name="twitter:title" content="邮件模板兼容性处理">
+<meta name="twitter:description" content="邮件兼容性处理">
   
     <link rel="alternative" href="/atom.xml" title="rlx" type="application/atom+xml">
   
@@ -157,289 +159,211 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-MailCompatibility" class="article article-type-post " itemscope="" itemprop="blogPost">
+  <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      邮件模板兼容性处理
+    </h1>
+  
+
+        
+        <a href="/2018/11/24/MailCompatibility/" class="archive-article-date">
+  	<time datetime="2018-11-24T05:33:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-24</time>
+</a>
+        
+      </header>
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>邮件兼容性处理<br><a id="more"></a></p>
+<blockquote>
+<ul>
+<li><h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4>邮件模板虽然内容是html，但因为安全原因，各大邮箱服务商以及各种邮件客户端都会对html代码进行处理，不会以预计的html代码展示。<br>国内许多公司内部使用outlook邮箱，但outlook邮箱(以outlook2015桌面版以及win10自带邮箱为例)为了“安全”使用的引擎为古老的<code>WordHtml</code>，个人认为解决掉outlook的兼容性问题后，其他邮箱基本会得到很好的适配(outlook移动版以及web版兼容性较为良好)。<br>本文以尽可能适配更多的常用邮箱为原则（重点为outlook桌面版）</li>
+</ul>
+</blockquote>
+<p><br></p>
+<blockquote>
+<ul>
+<li><h4 id="规范"><a href="#规范" class="headerlink" title="规范"></a>规范</h4>定制化邮箱中为保证实际邮件尽可能接近预期的显示效果，可遵循以下基本的规范</li>
+<li>不要妄想使用<code>table</code>以外的布局</li>
+<li>不要妄想使用<code>js</code>, 会被直接过滤掉</li>
+<li>不要妄想使用<code>css3</code>, <code>css2</code>仅支持部分属性</li>
+</ul>
+</blockquote>
+<p>尽量不要使用在<code>table</code>, <code>tr</code>, <code>td</code>, <code>span</code>, <code>a</code>,<code>img</code> 之外的元素，且能按照不嫌麻烦的准则，能多行/嵌套解决的不要在一行解决。同一行中显示多个元素，避免使用<code>span</code>并排的方式，实际在某些邮箱解析时会解析成<code>block</code>元素。内容尽量写到<code>body</code>里，样式尽量写内联，gmail邮箱默认删掉<code>body</code>之外的标签内容。<br>写内敛样式不要怕麻烦，为了兼容更多的邮箱<code>td</code> <code>table</code>标签可以写属性 <code>width</code> 最好在<code>style</code>中在写一遍<code>width</code>，钉钉邮箱默认会把<code>table</code>，<code>td</code>等标签的<code>height</code>属性删除。<code>table</code>与<code>td</code>样式建议写2份，qq邮箱中会屏蔽<code>table</code>的<code>style</code>但不会屏蔽<code>td</code>元素的<code>style</code>属性。</p>
+<blockquote>
+<ul>
+<li><h3 id="OUTLOOK桌面版兼容性"><a href="#OUTLOOK桌面版兼容性" class="headerlink" title="OUTLOOK桌面版兼容性"></a>OUTLOOK桌面版兼容性</h3>  内联<code>width</code>属性不要带单位，否则会被解析为空<br>  避免多个<code>span</code>的使用，其会被桌面端将多个<code>span</code>的内容解析到一个p标签中<br>  避免使用背景图样式，如需使用 切图拼接（最原始的方式），合理设置好属性与高宽度还是能做到有很少瑕疵的<br>  垂直居中方法：如果子元素有多个<code>img</code>标签，在<code>td</code>中设置<code>middle</code>，如果有单个<code>img</code>，在<code>img</code>中设置<code>middle</code><br>  多行隐藏：配合使用<code>display: -webkit-box</code> 优先使用<code>min-height</code>而非<code>height</code>属性(仅Chrome与Safari支持多行隐藏属性)<br>  如果<code>td</code>下只有一个<code>span</code>元素且没有其他元素时 <code>td</code>需要设置为350 <code>span</code>中的内联样式设置为350px<br>  使用垂直方向上对齐使用<code>top</code>而非<code>baseline</code><br>  <code>table</code>类的 <code>width/height</code>属性中设置 固定Number类型值，同时可以在style中设置单位为px的w/h，可防止w/h失效(移动端时需要带单位px)</li>
+</ul>
+</blockquote>
+<h6 id="outlook桌面版-对display-none-不兼容解决方案-用于隐藏手机版-或-后台渲染"><a href="#outlook桌面版-对display-none-不兼容解决方案-用于隐藏手机版-或-后台渲染" class="headerlink" title="outlook桌面版 对display: none 不兼容解决方案(用于隐藏手机版 或 后台渲染)"></a>outlook桌面版 对display: none 不兼容解决方案(用于隐藏手机版 或 后台渲染)</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">开头：`&lt;!--[if !mso]&gt;&lt;!-- --&gt;`</span><br><span class="line"> </span><br><span class="line">隐藏部分: +`&lt;内容&gt;`+</span><br><span class="line"> </span><br><span class="line">结尾：`&lt;!--&lt;![endif]--&gt;`</span><br></pre></td></tr></table></figure>
+<p><br></p>
+<h6 id="display-兼容性写法"><a href="#display-兼容性写法" class="headerlink" title="display 兼容性写法"></a>display 兼容性写法</h6><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">display</span>: <span class="selector-tag">-webkit-grid</span> !<span class="selector-tag">important</span>;</span><br><span class="line"><span class="selector-tag">display</span>: <span class="selector-tag">-moz-grid</span> !<span class="selector-tag">important</span>;</span><br><span class="line"><span class="selector-tag">display</span>: <span class="selector-tag">-ms-grid</span> !<span class="selector-tag">important</span>;</span><br><span class="line"><span class="selector-tag">display</span>: <span class="selector-tag">block</span> !<span class="selector-tag">important</span>;</span><br><span class="line"><span class="selector-tag">display</span>: <span class="selector-tag">grid</span> !<span class="selector-tag">important</span>;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<ul>
+<li><h3 id="其他邮箱"><a href="#其他邮箱" class="headerlink" title="其他邮箱"></a>其他邮箱</h3>  <code>img</code>标签注意设置为 <code>display: block</code> 来防止白边问题 (fix 手机qq邮箱登陆网易邮箱)<br>  <code>td</code> 中的img标签，尽量不要设置 <code>width=&quot;100%&quot;</code> 设置与td相同数值即可<br>  <code>qq邮箱/网易邮箱大师</code> 避免 如下 <code>td</code> 中 <code>table</code>属性100%的写法  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 错误示范 --&gt;</span><br><span class="line"> &lt;table&gt;</span><br><span class="line">    &lt;td&gt;</span><br><span class="line">        &lt;img width=&quot;999&quot; height=&quot;999&quot;/&gt;</span><br><span class="line">    &lt;/td&gt;</span><br><span class="line">    &lt;td&gt;</span><br><span class="line">        &lt;table width=&quot;100%&quot;&gt;&lt;/table&gt;</span><br><span class="line">    &lt;/td&gt;</span><br><span class="line">&lt;table&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</blockquote>
+<p>安卓qq邮箱中登陆网易邮箱 <code>img</code>除去设置的<code>width</code> <code>height</code> 属性之外 需要同在<code>style</code>中进行双重设置 style=”width: 100px; height: 30px”<br>mobile qq邮箱中打开网易邮箱邮件 支持 小于12px 的字体<br>foxmail 邮箱中 td不会被设置宽度的img标签撑起，需要在td中设置宽度<br>阿里邮箱 阿里邮箱会把<table><td>等标签的height属性删除，内联样式中的<code>height</code>设置为<code>auto</code><br>使用 <code>border: 0.5px solid</code> 在UC 浏览器中不支持</td></table></p>
+<blockquote>
+<h4 id="常用meta"><a href="#常用meta" class="headerlink" title="常用meta"></a>常用meta</h4><pre><code>适配IE
+&lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=edge&quot; /&gt;
+IOS设备phoneNumber字段是否显示为拨号链接 yes/no
+&lt;meta name=&quot;format-detection&quot; content=&quot;telephone=no&quot; /&gt;
+原始大小, 不允许缩放
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0, minimum-scale=1, maximum-scale=1&quot; /&gt;
+初始化缩放, 允许用户最小缩放比，允许用户最大缩放比    
+</code></pre></blockquote>
+<p><br><br></p>
+<blockquote>
+<h2 id="常见邮箱支持"><a href="#常见邮箱支持" class="headerlink" title="常见邮箱支持"></a>常见邮箱支持</h2><p><code>PC: Chrome 67.0.3396.99, win10 x64</code><br><code>Mobile: Android 8.0, Webview67.0.3396.87</code></p>
+</blockquote>
+<h3 id="网易邮箱"><a href="#网易邮箱" class="headerlink" title="网易邮箱"></a><code>网易邮箱</code></h3><p>pc-web端: 正常展示pc端, 支持外联样式<br>Android 网易邮箱大师: 正常展示手机端</p>
+<h3 id="qq邮箱"><a href="#qq邮箱" class="headerlink" title="qq邮箱"></a><code>qq邮箱</code></h3><p>pc-web端: 正常显示pc端, 支持外联样式</p>
+<p>Android qq邮箱(play版): 不会展示手机端，展示电脑端，手机端会被预期隐藏。</p>
+<h3 id="outlook邮箱"><a href="#outlook邮箱" class="headerlink" title="outlook邮箱"></a><code>outlook邮箱</code></h3><p>pc-web端: 正常显示pc端, 支持外联样式, 但html会被转义, table -&gt; div, 不支持多行隐藏。</p>
+<p>Android outlook邮箱：展示手机端，但显示容器会被左右边会被留空白，不支持多行隐藏。</p>
+<p>pc-windows：不支持<code>media</code>也不会做转义，不支持<code>display: none</code>, 可以从后端渲染<code>&lt;!-- --&gt;</code> 进行隐藏, 问题奇多, 解决方案如上文</p>
+<h3 id="gmail邮箱"><a href="#gmail邮箱" class="headerlink" title="gmail邮箱"></a><code>gmail邮箱</code></h3><p>pc-web端: 正常显示, 外联失效</p>
+<h3 id="钉钉邮箱"><a href="#钉钉邮箱" class="headerlink" title="钉钉邮箱"></a><code>钉钉邮箱</code></h3><p>pc-windows: 会把table, td 等标签的height属性删除, 内联样式中的height会被设置为auto, img 的height属性不会被删改</p>
+<p><br><br><br></p>
+<blockquote>
+<h3 id="Tips"><a href="#Tips" class="headerlink" title="Tips"></a>Tips</h3><ul>
+<li><code>qq邮箱</code>可以嵌入代码作为发送方, 但代码过多时可能会出现整个页面显示错乱(如再营销模板7000+行代码，接受超多代码邮件时亦是如此)</li>
+<li><code>outlook</code>，<code>钉钉企业邮</code> 可以转发到<code>qq邮箱</code>进行debug</li>
+<li><code>gmail</code> 可以使用手机版<code>qq邮箱</code>等登陆，不需要**</li>
+<li><code>foxmail</code> 邮箱中 <strong>td不会被设置宽度的img标签撑起</strong>，需要在td中设置宽度</li>
+<li><code>阿里邮箱</code> 阿里邮箱会把<code>&lt;table&gt;&lt;td&gt;</code>等标签的height属性删除，内联样式中的<code>height</code>设置为<code>auto</code></li>
+</ul>
+</blockquote>
+<p><br><br><br></p>
+<blockquote>
+<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a href="http://www.cnblogs.com/dolphinX/p/4081828.html" target="_blank" rel="noopener">http://www.cnblogs.com/dolphinX/p/4081828.html</a><br><a href="https://www.campaignmonitor.com/css/style-element/style-in-head/" target="_blank" rel="noopener">https://www.campaignmonitor.com/css/style-element/style-in-head/</a></p>
+</blockquote>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/07/27/ui-router-AngularJs/" class="archive-article-date">
-  	<time datetime="2017-07-27T12:16:02.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-07-27</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/07/27/ui-router-AngularJs/">ui-router-AngularJs</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">AngularJS</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">ui-router</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">mail</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://m1.republix.cn/2018/11/24/MailCompatibility/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/06/25/aspsum2/" class="archive-article-date">
-  	<time datetime="2017-06-25T13:05:30.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-06-25</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2017/07/27/ui-router-AngularJs/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">ui-router-AngularJs</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/06/25/aspsum2/">asp.net sum2</a>
-    </h1>
+  
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">asp.net基础</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/06/23/kalisum2/" class="archive-article-date">
-  	<time datetime="2017-06-23T12:15:14.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-06-23</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/06/23/kalisum2/">debian更新中因故导致开机只能进Rolling</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">kali</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/06/22/officemulu1/" class="archive-article-date">
-  	<time datetime="2017-06-22T12:31:31.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-06-22</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/06/22/officemulu1/">word中快速插入目录</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">office</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/06/22/ctmysql/" class="archive-article-date">
-  	<time datetime="2017-06-22T02:44:30.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-06-22</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/06/22/ctmysql/">centos配置mysql远程连接</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">centos</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">mysql</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/06/21/pm2sum1/" class="archive-article-date">
-  	<time datetime="2017-06-21T13:55:13.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-06-21</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/06/21/pm2sum1/">pm2部署</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/06/16/adbad/" class="archive-article-date">
-  	<time datetime="2017-06-16T03:34:32.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-06-16</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/06/16/adbad/">adb查找广告程序</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">android</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">adb</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-    
 
 
           </div>
@@ -462,8 +386,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,

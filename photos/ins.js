@@ -403,7 +403,7 @@
             // create slide object
             item = {
               src: linkEl.getAttribute('href'),
-              w: parseInt(size[0], 10),
+              w: parseInt(size[0], 10), // 
               h: parseInt(size[1], 10)
             };
   
@@ -420,7 +420,7 @@
                 //item.src = null;
               }
             }
-  
+            console.log(figureEl)
             item.el = figureEl; // save link to element for getThumbBoundsFn
             items.push(item);
           }
@@ -526,7 +526,7 @@
                 // find thumbnail
                 pageYScroll = window.pageYOffset || document.documentElement.scrollTop,
                 rect = thumbnail.getBoundingClientRect();
-  
+              console.log('do1')
               return {
                 x: rect.left,
                 y: rect.top + pageYScroll,
