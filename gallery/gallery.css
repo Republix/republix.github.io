@@ -1,0 +1,56 @@
+.gallery-container {
+    position: relative;
+}
+
+.g-group {
+    position: relative;
+}
+
+.gallery-title {
+    font-size: 16px;
+    margin: 10px auto;
+    font-weight: 900;
+}
+
+.gallery-list {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: flex-start;
+}
+
+.img-container {
+    position: relative;
+    display: inline-block;
+    width: 25%;
+    height: 0;
+    padding-bottom: 25%;
+    background-color: #e3e3e3;
+}
+
+.img-container > .img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+.img > img {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 100%;
+    max-height: 115%;
+    width: auto;
+    min-width: 100%;
+    max-width: unset !important;
+}
+
+
+/* background-image: url(/assets/img/e/avatar_01.gif); */
+
+
+

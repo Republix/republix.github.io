@@ -127,7 +127,7 @@
             // src += '.jpg';
   
             liTmpl += '<figure class="thumb" itemprop="associatedMedia" itemscope="" itemtype="http://schema.org/ImageObject">\
-                  <a href="' + src + '" itemprop="contentUrl" data-size="640x640" data-type="' + type + '" data-target="' + target + '">\
+                  <a href="' + src + '" itemprop="contentUrl" data-size="1040x640" data-type="' + type + '" data-target="' + target + '">\
                     <img class="reward-img" data-type="' + type + '" data-src="' + minSrc + '" src="/assets/img/empty.jpg" itemprop="thumbnail" onload="lzld(this)">\
                   </a>\
                   <figcaption style="display:none" itemprop="caption description">' + data.text[i] + '</figcaption>\
@@ -172,40 +172,10 @@
   
       function loadData(success) {
         if (!searchData) {
-          
-          // return
-          // var path  = 'https://github.com/Republix/DogeBackup/blob/master/source/photos/ins.json?t='
-          // var loadScript = function(path) {
-          //   var $script = document.createElement('script')
-          //   document.getElementsByTagName('body')[0].appendChild($script)
-          //   $script.setAttribute('src', path)
-          // }
-          // setTimeout(function() {
-          //   loadScript(path)
-          // }, 0)
-          // setTimeout(function() {
-          //   console.log(photosJson)
-          // }, 4440)
-          // return
-          // 
-          // fetch('https://github.com/Republix/DogeBackup/blob/master/source/photos/ins.json?t=' + +new Date(), {
-          //   headers: {
-          //     'content-Type': 'application/json',
-          //     'Access-Control-Allow-Origin': '*'
-          //   },
-          //   mode: 'no-cors',
-          //   method: 'GET',
-          // }).then((res) => {
-          //   console.log(res)
-          // }).catch((e) => {
-          //   console.log(e)
-          // })
-          // return
 
           var xhr = new XMLHttpRequest();
           // xhr.open('GET', 'https://github.com/Republix/DogeBackup/blob/master/source/photos/ins.json?t=' + +new Date(), true);
           xhr.open('GET', './ins.json?t=' + +new Date(), true);
-
   
           xhr.onload = function() {
             if (this.status >= 200 && this.status < 300) {
@@ -404,6 +374,7 @@
             item = {
               src: linkEl.getAttribute('href'),
               w: parseInt(size[0], 10), // 
+              // w: 1000,
               h: parseInt(size[1], 10)
             };
   
@@ -420,7 +391,7 @@
                 //item.src = null;
               }
             }
-            console.log(figureEl)
+            // console.log(figureEl)
             item.el = figureEl; // save link to element for getThumbBoundsFn
             items.push(item);
           }
@@ -526,7 +497,9 @@
                 // find thumbnail
                 pageYScroll = window.pageYOffset || document.documentElement.scrollTop,
                 rect = thumbnail.getBoundingClientRect();
-              console.log('do1')
+              console.log(rect)
+              console.log(rect.top, pageYScroll)
+              console.log(rect.left, rect.width)
               return {
                 x: rect.left,
                 y: rect.top + pageYScroll,
