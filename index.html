@@ -161,6 +161,105 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-wxd-login-catch" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/11/30/wxd-login-catch/">小程序登陆异常处理</a>
+    </h1>
+  
+
+        
+        <a href="/2018/11/30/wxd-login-catch/" class="archive-article-date">
+  	<time datetime="2018-11-30T12:34:32.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-30</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<h3 id="微信小程序-获取个人信息-手机号时异常处理方案"><a href="#微信小程序-获取个人信息-手机号时异常处理方案" class="headerlink" title="微信小程序-获取个人信息+手机号时异常处理方案"></a>微信小程序-获取个人信息+手机号时异常处理方案</h3><p><br><br></p>
+</blockquote>
+<p>以茶灵WeMall商城为例，小程序一期设计方案为封闭式小程序，既未拿到用户个人信息，用户微信绑定手机号时不允许进入小程序正文部分。</p>
+<p>原型设计：如果进入用户为新用户(根据用户是否授予小程序个人信息权限)，则导航到授权页面，同意授权流程为，同意授予用户信息 -&gt; 同意授予手机号 -&gt;  进入目标页面</p>
+<!--![image](F166EF22C11949199D627A7642B7DBFC)-->
+<p><a href="https://developers.weixin.qq.com/miniprogram/dev/api/open-api/user-info/wx.getUserInfo.html" target="_blank" rel="noopener">getUserInfo Api</a></p>
+<p><a href="https://developers.weixin.qq.com/miniprogram/dev/api/open-api/setting/wx.getSetting.html" target="_blank" rel="noopener">getSetting Api</a></p>
+<p>老版本的微信小程序在用户未授权时调用<code>wx.getUserInfo</code>将弹出授权确认弹框，用户点击确定是可从回调方法中获取到用户信息，18年4月中旬时官方宣布停止对getUserInfo弹窗授权的支持<a href="https://developers.weixin.qq.com/community/develop/doc/0000a26e1aca6012e896a517556c01" target="_blank" rel="noopener">link</a>，未授权时调用getUserInfo接口默认失败(开发版，体验版受影响，正式版仍可使用)，官方建议使用button绑定open-type属性值为getUserInfo 引导用户点击此button来获取用户信息。</p>
+<p><img src="88A0A5BD150445F1AFF99459F9F1AD8E" alt="image"><br><img src="4FFDE4FE5D1E4B559421990A592D9B38" alt="image"></p>
+<p>以茶灵WeMall为例使用button组建来替代getUserInfo模态框方案, <code>open-type</code>设置为<code>getUserInfo</code>, <code>getUserInfo</code>设置回调方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wxml:</span><br><span class="line">&lt;button open-type=&apos;getUserInfo&apos; bindgetuserinfo=&apos;userInfoCallback&apos; disabled=&apos;&#123;&#123; !agree1 || !agree2 &#125;&#125;&apos;  class=&apos;agree-uinfo-btn&apos; formType=&quot;submit&quot;&gt;&lt;/button&gt;</span><br></pre></td></tr></table></figure>
+<p>流程从用户点击授权button开始, 获取到用户数据时存储到变量中，页面切换出手机授权button 拿到手机加密信息后连同用户数据发送到后台</p>
+<p>正常思路:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line">let scope = null</span><br><span class="line">...</span><br><span class="line">onLoad () &#123;</span><br><span class="line">    scope = this</span><br><span class="line">    </span><br><span class="line">&#125;,</span><br><span class="line"></span><br><span class="line">// 获取用户信息回调</span><br><span class="line">userInfoCallback (data) &#123;</span><br><span class="line">    // data数据第一层为点击事件相关数据，data.detail为用户信息实体</span><br><span class="line">    // data下DTO userInfo: 用户信息，rawData: 原始数据字符串，signature: 校检查数据，encrytedData: 加密的用户信息数据，iv: 加密算法初始向量</span><br><span class="line">    if (data.detail &amp;&amp; !data.detail.rawData) &#123; // 当数据不存在时, detail下面只会有errMsg字段</span><br><span class="line">        wx.pro.showToast(&#123; title: &apos;您拒绝了授权&apos;, icon: &apos;none&apos;, duration: 2000 &#125;) // 建议使用promise封装常用api</span><br><span class="line">        return</span><br><span class="line">    &#125;</span><br><span class="line">    wx.getUserInfo (&#123;</span><br><span class="line">        success (infoData) &#123;</span><br><span class="line">            scope.setData(&#123; userJson: infoData &#125;) // 缓存数据</span><br><span class="line">        &#125;,</span><br><span class="line">        failed (err) &#123;</span><br><span class="line">            // wx.pro.showToast... // 授权失败提示</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;,</span><br><span class="line"></span><br><span class="line">// 获取手机号回调</span><br><span class="line">// </span><br><span class="line">phoneInfoCallback (data) &#123;</span><br><span class="line">    // 添加一些细节处理</span><br><span class="line">    // 优先处理错误 ！注意开发工具，Android，ios平台返回错误信息不保证完全相同，不要把主错误逻辑用在特定判断上</span><br><span class="line">    if (data.detail.errMsg === &apos;getPhoneNumber:fail:cancel to verify sms&apos;) &#123; // 注解①</span><br><span class="line">        wx.pro.showModal(&#123; title: &apos;授权失败&apos;, content: &apos;为了保证手机号的准确性，微信会在一段时间后对手机号进行验证&apos;, showCancel: false &#125;)</span><br><span class="line">        return</span><br><span class="line">    &#125;</span><br><span class="line">    // 用户在确认手机授权弹框点击取消, 同上 &apos;注意&apos;</span><br><span class="line">    if (data.detail.errMsg === &apos;getPhoneNumber:fail:cancel to confirm login&apos; || data.detail.errMsg === &apos;getPhoneNumber:fail user deny&apos;) &#123; // Android : devtools</span><br><span class="line">        wx.pro.showModal(&#123; title: &apos;授权失败&apos;, content: &apos;您取消了手机号授权&apos;, showCancel: false &#125;)</span><br><span class="line">        return</span><br><span class="line">    &#125;</span><br><span class="line">    // 主错误判断</span><br><span class="line">    if (e.detail.encryptedData &amp;&amp; e.detail.iv) &#123;</span><br><span class="line">        wx.pro.showModal(&#123; title: &apos;&apos;, content: &apos;授权失败&apos;, showCancel: false &#125;)</span><br><span class="line">        return </span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    this.setData(&#123; // save filed</span><br><span class="line">        phoneEncrytedData: e.detail.encryptedData,</span><br><span class="line">        phoneIv: e.detail.iv</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;,</span><br><span class="line"></span><br><span class="line">// 调用wx.login 获取code -②</span><br><span class="line">doWXLogin () &#123;</span><br><span class="line">    wx.login(&#123;</span><br><span class="line">        success (res) &#123; // res.code </span><br><span class="line">            // httpRequest // -③</span><br><span class="line">        &#125;,</span><br><span class="line">        fail () &#123;</span><br><span class="line">            wx.pro.showModal(&#123; title: &apos;&apos;, content: &apos;网络连接失败？是否重试?&apos; &#125;).then((res) =&gt; &#123;</span><br><span class="line">                res.confirm &amp;&amp; scope.doWXLogin()</span><br><span class="line">            &#125;)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;)    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>注解</p>
+<ul>
+<li>① 当用户长时间未对任意小程序授权过手机号信息或用户的微信账号由于某些安全原因被微信检测到时，再次授权手机号会触发小程序的安全检测：弹出验证码确认框来确认用户手机号是否变更，且该功能没有文档可查询，没有接口可调用，没有事件可监听，没有官方文档可给客户方看，但是不影响后续流程： 如果用户验证成功-&gt; resolve 微信继续获取手机号的流程，如果验证失败或取消-》 reject流程终止，手机号获取流程抛出异常。</li>
+<li>② 一个code仅能使用一次，规划流程使注意“重试”类方法确保重新调用wx.login获取生效code</li>
+</ul>
+<p>上述流程正常运行时，将数据发给后台，后台验证/解密数据时是有一定几率报错，在数据传输无误的情况下主要是因为验证用户信息完整性失败与解密手机信息失败两个原名，<br>去微信服务器解密数据时，是依据获取数据中的encrypted字段，而这些加密字段有一定的时效性.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">通过 wx.login 接口获得的用户登录态拥有一定的时效性。用户越久未使用小程序，用户登录态越有可能失效。</span><br><span class="line">反之如果用户一直在使用小程序，则用户登录态一直保持有效。具体时效逻辑由微信维护，对开发者透明。</span><br><span class="line">开发者只需要调用 wx.checkSession 接口检测当前用户登录态是否有效。</span><br></pre></td></tr></table></figure>
+<p>以获取手机号为例：手机号通过点击button主动触发回调方法，而用户登录状态以及session_key在此期间可能失效或被刷新，获取手机号信息回调方法一定先于异步方法wx.login，所以获取到的手机号信息有机率失效。</p>
+<p>解决方案<br>1<br>wx.login成功后的服务器登陆接口加特殊处理，添加特殊异常状态码确认手机号还是用户数据解密失败<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">// 411 用户数据  422 手机数据</span><br><span class="line">if (err.detail &amp;&amp; err.detail.code === 411) &#123;</span><br><span class="line">    wx.pro.login().then((res) =&gt; &#123;</span><br><span class="line">        let _code = res.code</span><br><span class="line">        wx.pro.getUserInfo().then((userInfo)) ....  </span><br><span class="line">    &#125;)</span><br><span class="line">    return</span><br><span class="line">&#125;</span><br><span class="line">if (err.detail &amp;&amp; err.detail.code === 422) &#123;</span><br><span class="line">    wx.pro.showModal(&#123; title: &apos;&apos;, content: &apos;微信数据过期，请重新授权&apos; &#125;)</span><br><span class="line">    return</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>2<br>提前调用wx.login<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">let nextTrick = null</span><br><span class="line">// wx.login -&gt; bindGetUserInfo -&gt; bindPhoneNumber -&gt; httpRequest</span><br><span class="line">// 此方法可能出现如下异常，wx.login由于网速或微信服务器故障（见开发者论坛18年11月上旬帖子）导致请求缓慢或异常，此时用户点击获取用户信息按钮，拿到的信息依旧不是最新的，</span><br><span class="line">所以可以在用户未点击按钮前进行wx.login并刷新用户数据</span><br><span class="line">onLoad () &#123;</span><br><span class="line">    this.refreshSessionKey()</span><br><span class="line">&#125;,</span><br><span class="line"></span><br><span class="line">refreshSessionKey () &#123;</span><br><span class="line">    </span><br><span class="line">    wx.pro.getSetting().then((auth) =&gt; &#123;</span><br><span class="line">        wx.pro.login().then((res) =&gt; &#123;</span><br><span class="line">            !nextTrick &amp;&amp; auth.authSetting[&apos;scope.userInfo&apos;] &amp;&amp; wx.pro.getUserInfo().then((userInfo) =&gt; &#123;</span><br><span class="line">                nextTrick = true</span><br><span class="line">                // 后续正常流程</span><br><span class="line">            &#125;, (err) =&gt; &#123; ..重试方案.. &#125;)</span><br><span class="line">        &#125;, (err) =&gt; &#123; ... &#125;)</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">&#125;,</span><br><span class="line"></span><br><span class="line">// 主动触发方法</span><br><span class="line">userInfoCallback (data) &#123;</span><br><span class="line">    if (nextTrick !== true) &#123;</span><br><span class="line">        nextTrick = true</span><br><span class="line">        wx.login(....) .....</span><br><span class="line">        return</span><br><span class="line">    &#125;</span><br><span class="line">    // 用户信息已经在wx.login 后刷新, 直接等待下一步 用户点击授权手机号</span><br><span class="line">    ....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<!--![image](DB3F311F16D040F98E9F7C64F8017B06)-->
+<!--![image](3243F3A745994815BD67D035F00C24B8)-->
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">wechatDev</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/11/30/wxd-login-catch/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-MailCompatibility" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
   <div class="article-inner">
     
@@ -878,18 +977,6 @@
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">centos</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">kali</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">mail</a>
               </li>
              
@@ -902,11 +989,23 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">office</a>
+                <a href="javascript:void(0)" class="js-tag color2">centos</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">asp.net基础</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">kali</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">office</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -915,6 +1014,10 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">ui-router</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">wechatDev</a>
               </li>
             
             <div class="clearfix"></div>
