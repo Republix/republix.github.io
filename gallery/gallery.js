@@ -4,7 +4,8 @@
 
     let config = {
         // imgRoot: './'
-        imgRoot: 'https://raw.githubusercontent.com/Republix/DogeBackup/master/photos/',
+        // imgRoot: 'https://raw.githubusercontent.com/Republix/DogeBackup/master/photos/',
+        imgRoot: '',
         imgOnError: '/assets/img/empty.jpg'
     }
 
