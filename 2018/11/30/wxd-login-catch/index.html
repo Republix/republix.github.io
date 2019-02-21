@@ -19,7 +19,8 @@
 <meta property="og:image" content="http://ww1.sinaimg.cn/large/85daa4ebly1g0dsb6lc70j20jq0k03zw.jpg">
 <meta property="og:image" content="http://ww1.sinaimg.cn/large/85daa4ebly1g0dseu0yycj2094076q32.jpg">
 <meta property="og:image" content="http://ww1.sinaimg.cn/large/85daa4ebly1g0dsfbl6h7j20jw0fi3zy.jpg">
-<meta property="og:updated_time" content="2019-02-21T01:32:56.102Z">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/85daa4ebly1g0dt4ww6omj20gl0bf0tm.jpg">
+<meta property="og:updated_time" content="2019-02-21T01:53:38.103Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="小程序登陆异常处理">
 <meta name="twitter:description" content="…..">
@@ -54,7 +55,7 @@
 <div class="intrude-less">
 	<header id="header" class="inner">
 		<a href="/" class="profilepic">
-			<img src="/assets/img/e/avatar_01.gif" class="js-avatar" style="height: 100%;">
+			<img src="/assets/img/e/avatar_03.jpg" class="js-avatar" style="height: 100%;">
 		</a>
 		<hgroup>
 		  <h1 class="header-author"><a href="/" class="author">Republix</a></h1>
@@ -90,13 +91,11 @@
 		<nav class="header-nav">
 			<div class="social">
 				
-					<a class="github" target="_blank" href="#" title="github"><i class="icon-github"></i></a>
+					<a class="github" target="_blank" href="https://github.com/Republix" title="github"><i class="icon-github"></i></a>
 		        
-					<a class="facebook" target="_blank" href="#" title="facebook"><i class="icon-facebook"></i></a>
+					<a class="mail" target="_blank" href="mailto:zadgnvsun@gmail.com" title="mail"><i class="icon-mail"></i></a>
 		        
-					<a class="google" target="_blank" href="#" title="google"><i class="icon-google"></i></a>
-		        
-					<a class="twitter" target="_blank" href="#" title="twitter"><i class="icon-twitter"></i></a>
+					<a class="twitter" target="_blank" href="https://twitter.com/Unmatch1" title="twitter"><i class="icon-twitter"></i></a>
 		        
 			</div>
 		</nav>
@@ -114,7 +113,7 @@
 	<div class="intrude-less">
 		<header id="header" class="inner">
 			<div class="profilepic">
-				<img src="/assets/img/e/avatar_01.gif" class="js-avatar">
+				<img src="/assets/img/e/avatar_03.jpg" class="js-avatar">
 			</div>
 			<hgroup>
 			  <h1 class="header-author js-header-author">Republix</h1>
@@ -133,13 +132,11 @@
 			<nav class="header-nav">
 				<div class="social">
 					
-						<a class="github" target="_blank" href="#" title="github"><i class="icon-github"></i></a>
+						<a class="github" target="_blank" href="https://github.com/Republix" title="github"><i class="icon-github"></i></a>
 			        
-						<a class="facebook" target="_blank" href="#" title="facebook"><i class="icon-facebook"></i></a>
+						<a class="mail" target="_blank" href="mailto:zadgnvsun@gmail.com" title="mail"><i class="icon-mail"></i></a>
 			        
-						<a class="google" target="_blank" href="#" title="google"><i class="icon-google"></i></a>
-			        
-						<a class="twitter" target="_blank" href="#" title="twitter"><i class="icon-twitter"></i></a>
+						<a class="twitter" target="_blank" href="https://twitter.com/Unmatch1" title="twitter"><i class="icon-twitter"></i></a>
 			        
 				</div>
 			</nav>
@@ -235,6 +232,7 @@
 <p>2<br>提前调用<code>wx.login</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">// 加载页面时调用 </span><br><span class="line">onLoad () &#123;</span><br><span class="line">    this.setData(&#123; loginLock: true &#125;) // 可能用到的状态锁 </span><br><span class="line">    wx.pro.login().then(.., ..)</span><br><span class="line">&#125;,</span><br><span class="line"></span><br><span class="line">// 其他流程之前进行wx.login</span><br></pre></td></tr></table></figure></p>
 <p>3 拿到用户信息后进行<code>wx.login</code> 并主动调用getUserInfo刷新数据</p>
 <p>目前在用的稳定方案</p>
+<p><img src="http://ww1.sinaimg.cn/large/85daa4ebly1g0dt4ww6omj20gl0bf0tm.jpg" alt="image"></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">// 授权button回调方法</span><br><span class="line">getUserInfoHandler (res) &#123;</span><br><span class="line">    // 用户数据可暂时不做储存</span><br><span class="line">    const suc = Boolean(res.detail &amp;&amp; res.detail.userInfo)</span><br><span class="line">    suc &amp;&amp; doWXLogin()</span><br><span class="line">&#125;,</span><br><span class="line"></span><br><span class="line">doWXLogin () &#123;</span><br><span class="line">    wx.pro.login().then((&#123;code&#125;) =&gt; &#123;</span><br><span class="line">        ... // 成功状态</span><br><span class="line">        wx.pro.getUserInfo().then((res) =&gt; &#123;</span><br><span class="line">            const postData = &#123;</span><br><span class="line">                userInfo: JSON.stringify(res),</span><br><span class="line">                code</span><br><span class="line">            &#125;</span><br><span class="line">            ... //   </span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><br><br></p>
 <blockquote>
@@ -463,23 +461,7 @@
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">centos</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">mail</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">asp.net基础</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">kali</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -488,6 +470,22 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">adb</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">asp.net基础</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">centos</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">kali</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -555,7 +553,15 @@
         <ul class="search-ul">
           
             <li class="search-li">
-              <a href="http://github.com/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>demo</a>
+              <a href="https://web.okjike.com" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>jike</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="http://koolshare.cn" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>koolshare</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="https://bbs.nga.cn/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>nga</a>
             </li>
           
         </ul>
